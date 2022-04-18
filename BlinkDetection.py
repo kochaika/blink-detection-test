@@ -35,8 +35,8 @@ def get_blink_ratio(eye_points, facial_landmarks):
 
 #livestream from the webcam 
 print('cap')
-#cap = cv2.VideoCapture(0)
-cap = cv2.VideoCapture('nvarguscamerasrc ! video/x-raw(memory:NVMM), width=3280, height=2464, format=(string)NV12, framerate=(fraction)20/1 ! nvvidconv ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink' , cv2.CAP_GSTREAMER)
+cap = cv2.VideoCapture(0)
+#cap = cv2.VideoCapture('nvarguscamerasrc ! video/x-raw(memory:NVMM), width=3280, height=2464, format=(string)NV12, framerate=(fraction)20/1 ! nvvidconv ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink' , cv2.CAP_GSTREAMER)
 print(cap)
 
 '''in case of a video
@@ -68,12 +68,12 @@ while True:
 
     #-----Step 2: converting image to grayscale-----
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    print(frame.shape)
+#    print(frame.shape)
 
     #-----Step 3: Face detection with dlib-----
     #detecting faces in the frame 
     faces,_,_ = detector.run(image = frame, upsample_num_times = 0, adjust_threshold = 0.0)
-    print(faces)
+#    print(faces)
 
     #-----Step 4: Detecting Eyes using landmarks in dlib-----
     for face in faces:
@@ -100,4 +100,3 @@ while True:
 #releasing the VideoCapture object
 cap.release()
 cv2.destroyAllWindows()
-

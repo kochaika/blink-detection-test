@@ -1,17 +1,53 @@
+"""
+Using the NanoCamera with USB Cameras and Debugging Enabled
+@author: Ayo Ayibiowu
+
+"""
+
+# from nanocamera.NanoCam import Camera
+import nanocamera as nano
 import cv2
-# open video0
-#cap = cv2.VideoCapture(0)
-cap = cv2.VideoCapture('nvarguscamerasrc ! video/x-raw(memory:NVMM), width=3280, height=2464, format=(string)NV12, framerate=(fraction)20/1 ! nvvidconv ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink' , cv2.CAP_GSTREAMER)
-# The control range can be viewed through v4l2-ctl -L
-#cap.set(cv2.CAP_PROP_BRIGHTNESS, 64)
-#cap.set(cv2.CAP_PROP_CONTRAST, 0)
-while(True):
-    # Capture frame-by-frame
-    ret, frame = cap.read()
-    # Display the resulting frame
-    cv2.imshow('frame', frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-# When everything done, release the capture
-cap.release()
-cv2.destroyAllWindows()
+
+if __name__ == '__main__':
+	# you can see connected USB cameras by running : ls /dev/video* on the terminal
+	# for usb camera /dev/video2, the device_id will be 2
+
+	# Create the Camera instance
+	try:
+		# Create the Camera instance
+		print("camera stream")
+		camera = nano.Camera(camera_type=0, device_id=0, width=640, height=480, fps=30, debug=True)
+	except Exception as e:
+		print("Exception occurred ------ ")
+		print("Exception Type - ", e)
+
+	else:
+		print('USB Camera ready? - ', camera.isReady())
+		while True:
+			try:
+				# read the camera image
+			    frame = camera.read()
+			    print("do something with frame")
+			# send_to_cloud(frame)
+			# display the frame
+			    cv2.imshow("Video Frame", frame)
+			    if cv2.waitKey(25) & 0xFF == ord('q'):
+			        break
+			except KeyboardInterrupt:
+				break
+			except Exception as e:
+				print("Exception occurred in Reading ------ ")
+				print("Exception Type - ", e)
+				print(camera.hasError())
+				break
+
+		print("done here")
+		try:
+			# close the camera instance
+			camera.release()
+		except Exception as e:
+			print("Release Exception")
+			print("Exception type - ", e)
+
+		# remove camera object
+		del camera

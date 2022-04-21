@@ -69,7 +69,7 @@ cv2.namedWindow('BlinkDetector')
 
 #-----Step 3: Face detection with dlib-----
 detector = dlib.get_frontal_face_detector()
-cnn_face_detector = dlib.cnn_face_detection_model_v1("mmod_human_face_detector.dat")
+#cnn_face_detector = dlib.cnn_face_detection_model_v1("mmod_human_face_detector.dat")
 
 
 
@@ -80,33 +80,23 @@ left_eye_landmarks  = [36, 37, 38, 39, 40, 41]
 right_eye_landmarks = [42, 43, 44, 45, 46, 47]
 t = time.time()
 while True:
-    #capturing frame
-#    print('cap.read():')
-    
     retval, frame = cap.read()
-#    frame = camera.read()
-
-    #exit the application if frame not found
-#    if not retval:
-#        print("Can't receive frame (stream end?). Exiting ...")
-#        break 
+    if not retval:
+        print("Can't receive frame (stream end?). Exiting ...")
+        break 
 
     frame = cv2.resize(frame, (640,360), interpolation = cv2.INTER_AREA)
-
-    #-----Step 2: converting image to grayscale-----
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-#    print(frame.shape)
 
     #-----Step 3: Face detection with dlib-----
     #detecting faces in the frame 
     t = time.time()
-#    faces,_,_ = detector.run(image = frame, upsample_num_times = 0, adjust_threshold = 0.0)
-    dets = cnn_face_detector(frame, 1)
-    print(dets)
+    faces,_,_ = detector.run(image = frame, upsample_num_times = 0, adjust_threshold = 0.0)
+#    dets = cnn_face_detector(frame, 1)
     cur = time.time()
     print(cur-t)
     #-----Step 4: Detecting Eyes using landmarks in dlib-----
-    """
+    
     for face in faces:
         
         landmarks = predictor(frame, face)
@@ -124,11 +114,11 @@ while True:
             cv2.putText(frame,"BLINKING",(10,50), cv2.FONT_HERSHEY_SIMPLEX,
             2,(255,255,255),2,cv2.LINE_AA)
 
-"""
-#    cv2.imshow('BlinkDetector', frame)
-#    key = cv2.waitKey(1)
-#    if key == 27:
-#        break
+
+    cv2.imshow('BlinkDetector', frame)
+    key = cv2.waitKey(1)
+    if key == 27:
+        break
 
 #releasing the VideoCapture object
 cap.release()

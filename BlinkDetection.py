@@ -53,7 +53,7 @@ def rect_to_bb(rect):
 #cap = cv2.VideoCapture(1)
 #pipeline = 'nvarguscamerasrc !  video/x-raw(memory:NVMM), width=1920, height=1080, format=NV12, framerate=30/1 ! nvvidconv flip-method=0 ! video/x-raw, width=1920, height=1080, format=BGRx ! videoconvert ! video/x-raw, format=BGR ! appsink'
 #cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)
-cap = cv2.VideoCapture('nvarguscamerasrc ! video/x-raw(memory:NVMM), width=1280, height=720, format=(string)NV12, framerate=(fraction)120/1 ! nvvidconv ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink' , cv2.CAP_GSTREAMER)
+cap = cv2.VideoCapture('nvarguscamerasrc ! video/x-raw(memory:NVMM), width=1280, height=720, format=(string)NV12, framerate=(fraction)120/1 ! nvvidconv flip-method=2 ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink' , cv2.CAP_GSTREAMER)
 #gst-launch-1.0 nvarguscamerasrc ! 'video/x-raw(memory:NVMM), width=1280, height=720, forat=NV12, framerate=120/1' ! fakesink
 #print(cap)
 #camera = nano.Camera(camera_type=0, device_id=0, width=1640, height=1232, fps=20, debug=False, flip=2)
@@ -74,7 +74,7 @@ detector = dlib.get_frontal_face_detector()
 
 
 #-----Step 4: Detecting Eyes using landmarks in dlib-----
-#predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 #these landmarks are based on the image above 
 left_eye_landmarks  = [36, 37, 38, 39, 40, 41]
 right_eye_landmarks = [42, 43, 44, 45, 46, 47]

@@ -14,7 +14,7 @@ import subprocess
 from PIL import Image, ImageDraw, ImageFont
 #import adafruit_ssd1306
 import Adafruit_SSD1306
-# import RPi.GPIO as GPIO
+import Jetson.GPIO as GPIO
 
 
 # Create the I2C interface.
@@ -56,42 +56,27 @@ x = 0
 font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
 font1 = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 40)
 
-# GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
+
 # GPIO.setwarnings(False)
-# leds = [17,18,22]
-# for i in leds:
-#     GPIO.setup(i,GPIO.OUT)
+actions = {'red':27, 'yellow':18, 'green':17, 'beep':23}
+for i in actions:
+    GPIO.setup(actions[i], GPIO.OUT, initial=GPIO.LOW)
 
+#val = GPIO.LOW
+try:
+    while True:
+        for i in actions:
+            draw.rectangle((0, 0, width, height), outline=0, fill=0)
+            draw.text((x, top + 0), i, font=font1, fill=255)
+            #draw.text((x, top + 16), ">.<", font=font1, fill=255)
+        # Display image.
+            disp.image(image)
+            disp.display()
+            GPIO.output(actions[i], GPIO.HIGH)
+            time.sleep(0.5)
+            GPIO.output(actions[i], GPIO.LOW)
+            time.sleep(0.5)
 
-
-
-a = 0
-while True:
-
-    draw.rectangle((0, 0, width, height), outline=0, fill=0)
-    gyr = ""
-    
-    draw.text((x, top + 0), "Count: " + str(a), font=font, fill=255)
-    a+=10
-#     if a >= 20:
-#         GPIO.output(leds[0],GPIO.HIGH)
-#         gyr+="g"
-#     if a > 40:
-#         GPIO.output(leds[1],GPIO.HIGH)
-#         gyr+="y"
-#     if a >= 70:
-#         GPIO.output(leds[2],GPIO.HIGH)
-#         gyr+="r"
-#     if a > 99:
-#         for i in leds:
-#             GPIO.output(i,GPIO.LOW)
-#         a = 0
-    if a > 50:
-        draw.text((x, top + 16), ">.<", font=font1, fill=255)
-    draw.text((85, top + 25), gyr, font=font, fill=255)
-
-    # Display image.
-    disp.image(image)
-    disp.display()
-    time.sleep(0.1)
-
+finally:
+    GPIO.cleanup()

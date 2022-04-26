@@ -2,7 +2,7 @@
 import cv2
 import dlib
 import math
-import nanocamera as nano
+#import nanocamera as nano
 import time
 
 BLINK_RATIO_THRESHOLD = 5.0 #5.7
@@ -48,17 +48,7 @@ def rect_to_bb(rect):
     # return a tuple of (x, y, w, h)
     return (x, y, w, h)
 
-#livestream from the webcam 
-#print('cap')
-#cap = cv2.VideoCapture(1)
-#pipeline = 'nvarguscamerasrc !  video/x-raw(memory:NVMM), width=1920, height=1080, format=NV12, framerate=30/1 ! nvvidconv flip-method=0 ! video/x-raw, width=1920, height=1080, format=BGRx ! videoconvert ! video/x-raw, format=BGR ! appsink'
-#cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)
-cap = cv2.VideoCapture('nvarguscamerasrc ! video/x-raw(memory:NVMM), width=1280, height=720, format=(string)NV12, framerate=(fraction)120/1 ! nvvidconv flip-method=2 ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink' , cv2.CAP_GSTREAMER)
-#gst-launch-1.0 nvarguscamerasrc ! 'video/x-raw(memory:NVMM), width=1280, height=720, forat=NV12, framerate=120/1' ! fakesink
-#print(cap)
-#camera = nano.Camera(camera_type=0, device_id=0, width=1640, height=1232, fps=20, debug=False, flip=2)
-#3264 x 2464 
-#1640 x 1232
+cap = cv2.VideoCapture(0)
 
 
 '''in case of a video
@@ -92,7 +82,6 @@ while True:
     #detecting faces in the frame 
     t = time.time()
     faces,_,_ = detector.run(image = frame, upsample_num_times = 0, adjust_threshold = 0.0)
-#    dets = cnn_face_detector(frame, 1)
     cur = time.time()
     print(cur-t)
     #-----Step 4: Detecting Eyes using landmarks in dlib-----
